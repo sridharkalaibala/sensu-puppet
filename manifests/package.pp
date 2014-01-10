@@ -10,10 +10,6 @@ class sensu::package {
 
   case $::operatingsystem {
 
-    'Debian','Ubuntu': {
-      class { 'sensu::repo::apt': }
-    }
-
     'Fedora','RedHat','Centos': {
       class { 'sensu::repo::yum': }
     }

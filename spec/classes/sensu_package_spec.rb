@@ -31,49 +31,6 @@ describe 'sensu' do
 
     context 'repos' do
 
-      context 'ubuntu' do
-        let(:facts) { { :operatingsystem => 'Ubuntu' } }
-
-        context 'with puppet-apt installed' do
-          let(:pre_condition) { [ 'define apt::source ($ensure, $location, $release, $repos, $include_src) {}', 'define apt::key ($key, $key_source) {}' ] }
-
-          context 'default' do
-            it { should contain_apt__source('sensu').with(
-              :ensure      => 'present',
-              :location    => 'http://repos.sensuapp.org/apt',
-              :release     => 'sensu',
-              :repos       => 'main',
-              :include_src => false,
-              :before      => 'Package[sensu]'
-            ) }
-
-            it { should contain_apt__key('sensu').with(
-              :key         => '7580C77F',
-              :key_source  => 'http://repos.sensuapp.org/apt/pubkey.gpg'
-            ) }
-          end
-
-          context 'unstable repo' do
-            let(:params) { { :repo => 'unstable' } }
-            it { should contain_apt__source('sensu').with_repos('unstable') }
-          end
-
-          context 'install_repo => false' do
-            let(:params) { { :install_repo => false, :repo => 'main' } }
-            it { should contain_apt__source('sensu').with_ensure('absent') }
-
-            it { should contain_apt__key('sensu').with(
-              :key         => '7580C77F',
-              :key_source  => 'http://repos.sensuapp.org/apt/pubkey.gpg'
-            ) }
-          end
-        end
-
-        context 'without puppet-apt installed' do
-          it { expect { should raise_error(Puppet::Error) } }
-        end
-      end
-
       context 'redhat' do
         let(:facts) { { :operatingsystem => 'RedHat' } }
 
